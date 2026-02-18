@@ -3,154 +3,125 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Image Upscale Tool</title>
-
+<title>Image Upscaler Tool</title>
 <style>
-    body {
-        margin: 0;
-        font-family: Arial, sans-serif;
-        background: #f4faff;
-    }
-
-    .container {
-        max-width: 500px;
-        margin: 30px auto;
-        background: #ffffff;
-        padding: 20px;
-        border-radius: 12px;
-        box-shadow: 0 4px 15px rgba(0, 123, 255, 0.2);
-        text-align: center;
-    }
-
-    h2 {
-        color: #007BFF;
-        margin-bottom: 20px;
-    }
-
-    input[type="file"],
-    select,
-    input[type="range"] {
-        width: 100%;
-        margin: 10px 0;
-        padding: 8px;
-        border-radius: 6px;
-        border: 1px solid #007BFF;
-    }
-
-    .preview {
-        margin-top: 15px;
-    }
-
-    img {
-        max-width: 100%;
-        border-radius: 10px;
-        margin-top: 10px;
-    }
-
-    button {
-        background: #007BFF;
-        color: white;
-        border: none;
-        padding: 10px 20px;
-        margin-top: 15px;
-        border-radius: 6px;
-        cursor: pointer;
-        font-size: 16px;
-    }
-
-    button:hover {
-        background: #0056b3;
-    }
-
-    .info {
-        font-size: 14px;
-        color: #333;
-    }
-
-    @media (max-width: 600px) {
-        .container {
-            margin: 10px;
-        }
-    }
+body{
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg,#1e1e2f,#2b2b45);
+    color:#fff;
+    text-align:center;
+    padding:20px;
+}
+.container{
+    max-width:600px;
+    margin:auto;
+    background:#2f2f4f;
+    padding:25px;
+    border-radius:15px;
+    box-shadow:0 0 20px rgba(0,0,0,0.4);
+}
+h1{
+    margin-bottom:20px;
+}
+input[type="file"]{
+    margin:15px 0;
+}
+.options button{
+    margin:8px;
+    padding:10px 15px;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+    background:#4cafef;
+    color:white;
+    font-weight:bold;
+}
+.options button:hover{
+    background:#2196f3;
+}
+#preview{
+    margin-top:15px;
+    max-width:100%;
+    border-radius:10px;
+}
+#downloadBtn{
+    display:none;
+    margin-top:15px;
+    padding:10px 15px;
+    border:none;
+    border-radius:8px;
+    background:#4caf50;
+    color:white;
+    cursor:pointer;
+}
 </style>
 </head>
-
 <body>
 
 <div class="container">
-    <h2>Image Upscale & Converter</h2>
+    <h1>🖼 Image Upscaler</h1>
 
     <input type="file" id="upload" accept="image/*">
 
-    <label class="info">Upscale Size (%): <span id="scaleValue">100</span>%</label>
-    <input type="range" id="scale" min="50" max="300" value="100">
-
-    <select id="format">
-        <option value="image/jpeg">JPG</option>
-        <option value="image/png">PNG</option>
-        <option value="image/webp">WEBP</option>
-    </select>
-
-    <div class="preview">
-        <canvas id="canvas"></canvas>
+    <div class="options">
+        <button onclick="setScale(3840)">4K Upscale</button>
+        <button onclick="setScale(7680)">8K Upscale</button>
+        <button onclick="setScale(15360)">16K Upscale</button>
     </div>
 
-    <button onclick="processImage()">Convert & Download</button>
+    <button onclick="upscaleImage()">Upscale Image</button>
+
+    <br>
+    <img id="preview">
+
+    <br>
+    <a id="downloadBtn" download="upscaled-image.png">
+        <button>Download Image</button>
+    </a>
 </div>
 
 <script>
-const upload = document.getElementById("upload");
-const canvas = document.getElementById("canvas");
-const ctx = canvas.getContext("2d");
-const scaleSlider = document.getElementById("scale");
-const scaleValue = document.getElementById("scaleValue");
-const formatSelect = document.getElementById("format");
+let selectedWidth = 3840;
+let originalImage = new Image();
 
-let img = new Image();
-
-scaleSlider.addEventListener("input", () => {
-    scaleValue.textContent = scaleSlider.value;
-    if (img.src) drawImage();
-});
-
-upload.addEventListener("change", function(event) {
-    const file = event.target.files[0];
-    if (!file) return;
-
+document.getElementById("upload").addEventListener("change", function(e){
     const reader = new FileReader();
-    reader.onload = function(e) {
-        img.src = e.target.result;
-        img.onload = function() {
-            drawImage();
-        };
-    };
-    reader.readAsDataURL(file);
+    reader.onload = function(event){
+        originalImage.src = event.target.result;
+        document.getElementById("preview").src = event.target.result;
+    }
+    reader.readAsDataURL(e.target.files[0]);
 });
 
-function drawImage() {
-    const scale = scaleSlider.value / 100;
-    canvas.width = img.width * scale;
-    canvas.height = img.height * scale;
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+function setScale(width){
+    selectedWidth = width;
+    alert("Selected: " + (width/960) + "K Upscale");
 }
 
-function processImage() {
-    if (!img.src) {
-        alert("Please upload an image first.");
+function upscaleImage(){
+    if(!originalImage.src){
+        alert("Please upload an image first!");
         return;
     }
 
-    const format = formatSelect.value;
-    const link = document.createElement("a");
+    const canvas = document.createElement("canvas");
+    const ctx = canvas.getContext("2d");
 
-    let extension = format.split("/")[1];
-    link.download = "converted-image." + extension;
+    const ratio = originalImage.height / originalImage.width;
+    canvas.width = selectedWidth;
+    canvas.height = selectedWidth * ratio;
 
-    canvas.toBlob(function(blob) {
-        link.href = URL.createObjectURL(blob);
-        link.click();
-    }, format, 0.95);
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = "high";
+    ctx.drawImage(originalImage,0,0,canvas.width,canvas.height);
+
+    const upscaledData = canvas.toDataURL("image/png");
+
+    document.getElementById("preview").src = upscaledData;
+
+    const downloadLink = document.getElementById("downloadBtn");
+    downloadLink.href = upscaledData;
+    downloadLink.style.display = "inline-block";
 }
 </script>
 
