@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Image Upscale Tool</title>
+
+<style>
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background: #f4faff;
+    }
+
+    .container {
+        max-width: 500px;
+        margin: 30px auto;
+        background: #ffffff;
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 4px 15px rgba(0, 123, 255, 0.2);
+        text-align: center;
+    }
+
+    h2 {
+        color: #007BFF;
+        margin-bottom: 20px;
+    }
+
+    input[type="file"],
+    select,
+    input[type="range"] {
+        width: 100%;
+        margin: 10px 0;
+        padding: 8px;
+        border-radius: 6px;
+        border: 1px solid #007BFF;
+    }
+
+    .preview {
+        margin-top: 15px;
+    }
+
+    img {
+        max-width: 100%;
+        border-radius: 10px;
+        margin-top: 10px;
+    }
+
+    button {
+        background: #007BFF;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        margin-top: 15px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 16px;
+    }
+
+    button:hover {
+        background: #0056b3;
+    }
+
+    .info {
+        font-size: 14px;
+        color: #333;
+    }
+
+    @media (max-width: 600px) {
+        .container {
+            margin: 10px;
+        }
+    }
+</style>
+</head>
+
+<body>
+
+<div class="container">
+    <h2>Image Upscale & Converter</h2>
+
+    <input type="file" id="upload" accept="image/*">
+
+    <label class="info">Upscale Size (%): <span id="scaleValue">100</span>%</label>
+    <input type="range" id="scale" min="50" max="300" value="100">
+
+    <select id="format">
+        <option value="image/jpeg">JPG</option>
+        <option value="image/png">PNG</option>
+        <option value="image/webp">WEBP</option>
+    </select>
+
+    <div class="preview">
+        <canvas id="canvas"></canvas>
+    </div>
+
+    <button onclick="processImage()">Convert & Download</button>
+</div>
+
+<script>
+const upload = document.getElementById("upload");
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
+const scaleSlider = document.getElementById("scale");
+const scaleValue = document.getElementById("scaleValue");
+const formatSelect = document.getElementById("format");
+
+let img = new Image();
+
+scaleSlider.addEventListener("input", () => {
+    scaleValue.textContent = scaleSlider.value;
+    if (img.src) drawImage();
+});
+
+upload.addEventListener("change", function(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        img.src = e.target.result;
+        img.onload = function() {
+            drawImage();
+        };
+    };
+    reader.readAsDataURL(file);
+});
+
+function drawImage() {
+    const scale = scaleSlider.value / 100;
+    canvas.width = img.width * scale;
+    canvas.height = img.height * scale;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+}
+
+function processImage() {
+    if (!img.src) {
+        alert("Please upload an image first.");
+        return;
+    }
+
+    const format = formatSelect.value;
+    const link = document.createElement("a");
+
+    let extension = format.split("/")[1];
+    link.download = "converted-image." + extension;
+
+    canvas.toBlob(function(blob) {
+        link.href = URL.createObjectURL(blob);
+        link.click();
+    }, format, 0.95);
+}
+</script>
+
+</body>
+</html>
