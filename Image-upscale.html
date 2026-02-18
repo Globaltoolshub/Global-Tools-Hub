@@ -1,128 +1,180 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Image Upscaler Tool</title>
+<title>Image Upscaler Pro</title>
+
 <style>
 body{
-    font-family: Arial, sans-serif;
-    background: linear-gradient(135deg,#1e1e2f,#2b2b45);
-    color:#fff;
+    font-family: Arial;
     text-align:center;
+    background:#111;
+    color:white;
     padding:20px;
 }
 .container{
     max-width:600px;
     margin:auto;
-    background:#2f2f4f;
-    padding:25px;
-    border-radius:15px;
-    box-shadow:0 0 20px rgba(0,0,0,0.4);
+    background:#222;
+    padding:20px;
+    border-radius:10px;
 }
-h1{
-    margin-bottom:20px;
-}
-input[type="file"]{
-    margin:15px 0;
-}
-.options button{
-    margin:8px;
+button{
     padding:10px 15px;
+    margin:5px;
     border:none;
-    border-radius:8px;
+    border-radius:5px;
     cursor:pointer;
-    background:#4cafef;
+    background:#00aaff;
     color:white;
-    font-weight:bold;
 }
-.options button:hover{
-    background:#2196f3;
+button:hover{
+    background:#0088cc;
 }
-#preview{
-    margin-top:15px;
+img{
     max-width:100%;
+    margin-top:15px;
     border-radius:10px;
 }
 #downloadBtn{
     display:none;
+    background:#28a745;
+}
+
+/* Progress Bar */
+.progress-container{
+    width:100%;
+    background:#333;
+    border-radius:10px;
     margin-top:15px;
-    padding:10px 15px;
-    border:none;
-    border-radius:8px;
-    background:#4caf50;
-    color:white;
-    cursor:pointer;
+    display:none;
+}
+.progress-bar{
+    width:0%;
+    height:20px;
+    background:#00ff99;
+    border-radius:10px;
+    transition:width 0.3s;
+}
+#progressText{
+    margin-top:8px;
 }
 </style>
 </head>
+
 <body>
 
 <div class="container">
-    <h1>🖼 Image Upscaler</h1>
+    <h2>Image Upscaler</h2>
 
-    <input type="file" id="upload" accept="image/*">
+    <input type="file" id="upload" accept="image/*"><br><br>
 
-    <div class="options">
-        <button onclick="setScale(3840)">4K Upscale</button>
-        <button onclick="setScale(7680)">8K Upscale</button>
-        <button onclick="setScale(15360)">16K Upscale</button>
+    <div>
+        <button onclick="setResolution(3840)">4K</button>
+        <button onclick="setResolution(7680)">8K</button>
+        <button onclick="setResolution(15360)">16K</button>
     </div>
 
     <button onclick="upscaleImage()">Upscale Image</button>
+
+    <!-- Progress -->
+    <div class="progress-container" id="progressContainer">
+        <div class="progress-bar" id="progressBar"></div>
+    </div>
+    <div id="progressText"></div>
 
     <br>
     <img id="preview">
 
     <br>
-    <a id="downloadBtn" download="upscaled-image.png">
-        <button>Download Image</button>
+    <a id="downloadLink" download="upscaled-image.png">
+        <button id="downloadBtn">Download</button>
     </a>
 </div>
 
 <script>
-let selectedWidth = 3840;
-let originalImage = new Image();
 
-document.getElementById("upload").addEventListener("change", function(e){
+let selectedWidth = 3840;
+let img = new Image();
+
+// Upload Image
+document.getElementById("upload").addEventListener("change", function(event){
+    const file = event.target.files[0];
+    if(!file) return;
+
     const reader = new FileReader();
-    reader.onload = function(event){
-        originalImage.src = event.target.result;
-        document.getElementById("preview").src = event.target.result;
+    reader.onload = function(e){
+        img.src = e.target.result;
     }
-    reader.readAsDataURL(e.target.files[0]);
+    reader.readAsDataURL(file);
 });
 
-function setScale(width){
+img.onload = function(){
+    document.getElementById("preview").src = img.src;
+}
+
+function setResolution(width){
     selectedWidth = width;
-    alert("Selected: " + (width/960) + "K Upscale");
+    alert("Selected Resolution: " + width + "px width");
 }
 
 function upscaleImage(){
-    if(!originalImage.src){
-        alert("Please upload an image first!");
+
+    if(!img.src){
+        alert("Please upload image first!");
         return;
     }
 
-    const canvas = document.createElement("canvas");
-    const ctx = canvas.getContext("2d");
+    const progressContainer = document.getElementById("progressContainer");
+    const progressBar = document.getElementById("progressBar");
+    const progressText = document.getElementById("progressText");
 
-    const ratio = originalImage.height / originalImage.width;
-    canvas.width = selectedWidth;
-    canvas.height = selectedWidth * ratio;
+    progressContainer.style.display = "block";
+    progressBar.style.width = "0%";
+    progressText.innerText = "Processing: 0%";
 
-    ctx.imageSmoothingEnabled = true;
-    ctx.imageSmoothingQuality = "high";
-    ctx.drawImage(originalImage,0,0,canvas.width,canvas.height);
+    let progress = 0;
 
-    const upscaledData = canvas.toDataURL("image/png");
+    let interval = setInterval(() => {
+        progress += 5;
+        progressBar.style.width = progress + "%";
+        progressText.innerText = "Upscaling Image: " + progress + "%";
 
-    document.getElementById("preview").src = upscaledData;
+        if(progress >= 100){
+            clearInterval(interval);
 
-    const downloadLink = document.getElementById("downloadBtn");
-    downloadLink.href = upscaledData;
-    downloadLink.style.display = "inline-block";
+            // Real Upscale After Animation
+            const canvas = document.createElement("canvas");
+            const ctx = canvas.getContext("2d");
+
+            let ratio = img.height / img.width;
+
+            canvas.width = selectedWidth;
+            canvas.height = selectedWidth * ratio;
+
+            ctx.imageSmoothingEnabled = true;
+            ctx.imageSmoothingQuality = "high";
+
+            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+            const upscaledImage = canvas.toDataURL("image/png");
+
+            document.getElementById("preview").src = upscaledImage;
+
+            const downloadBtn = document.getElementById("downloadBtn");
+            const downloadLink = document.getElementById("downloadLink");
+
+            downloadLink.href = upscaledImage;
+            downloadBtn.style.display = "inline-block";
+
+            progressText.innerText = "✅ Upscale Complete!";
+        }
+
+    }, 100); // Speed Control
+
 }
+
 </script>
 
 </body>
