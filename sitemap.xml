@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+<!-- Homepage -->
+<url><loc>https://globaltoolhub.online/</loc></url>
+
+<!-- 🖼 Image Tools -->
+<url><loc>https://globaltoolhub.online/image-converter.html</loc></url>
+<url><loc>https://globaltoolhub.online/image-compressor.html</loc></url>
+<url><loc>https://globaltoolhub.online/image-resizer.html</loc></url>
+<url><loc>https://globaltoolhub.online/image-cropper.html</loc></url>
+<url><loc>https://globaltoolhub.online/image-to-text-ocr.html</loc></url>
+<url><loc>https://globaltoolhub.online/image-rotator-flipper.html</loc></url>
+
+<!-- 📄 Document Tools -->
+<url><loc>https://globaltoolhub.online/pdf-to-word.html</loc></url>
+<url><loc>https://globaltoolhub.online/word-to-pdf.html</loc></url>
+<url><loc>https://globaltoolhub.online/pdf-compressor.html</loc></url>
+<url><loc>https://globaltoolhub.online/pdf-merger.html</loc></url>
+<url><loc>https://globaltoolhub.online/pdf-splitter.html</loc></url>
+<url><loc>https://globaltoolhub.online/document-converter.html</loc></url>
+<url><loc>https://globaltoolhub.online/pdf-lock-unlock.html</loc></url>
+<url><loc>https://globaltoolhub.online/esign-pdf.html</loc></url>
+
+<!-- 🧮 Calculator Tools -->
+<url><loc>https://globaltoolhub.online/scientific-calculator.html</loc></url>
+<url><loc>https://globaltoolhub.online/age-calculator.html</loc></url>
+<url><loc>https://globaltoolhub.online/bmi-calculator.html</loc></url>
+<url><loc>https://globaltoolhub.online/loan-emi-calculator.html</loc></url>
+<url><loc>https://globaltoolhub.online/gst-calculator.html</loc></url>
+<url><loc>https://globaltoolhub.online/currency-converter.html</loc></url>
+
+<!-- 🔤 Text Tools -->
+<url><loc>https://globaltoolhub.online/text-case-converter.html</loc></url>
+<url><loc>https://globaltoolhub.online/word-character-counter.html</loc></url>
+<url><loc>https://globaltoolhub.online/remove-duplicate-lines.html</loc></url>
+<url><loc>https://globaltoolhub.online/text-sorter.html</loc></url>
+<url><loc>https://globaltoolhub.online/text-reverser.html</loc></url>
+<url><loc>https://globaltoolhub.online/text-encrypt-decrypt.html</loc></url>
+
+<!-- 🌐 Web/Developer Tools -->
+<url><loc>https://globaltoolhub.online/html-css-js-minifier.html</loc></url>
+<url><loc>https://globaltoolhub.online/json-formatter-validator.html</loc></url>
+<url><loc>https://globaltoolhub.online/base64-encoder-decoder.html</loc></url>
+<url><loc>https://globaltoolhub.online/url-encoder-decoder.html</loc></url>
+<url><loc>https://globaltoolhub.online/color-picker-converter.html</loc></url>
+<url><loc>https://globaltoolhub.online/regex-tester.html</loc></url>
+
+<!-- 🎨 Color Tools -->
+<url><loc>https://globaltoolhub.online/color-picker-from-image.html</loc></url>
+<url><loc>https://globaltoolhub.online/hex-to-rgb-converter.html</loc></url>
+<url><loc>https://globaltoolhub.online/gradient-generator.html</loc></url>
+<url><loc>https://globaltoolhub.online/contrast-checker.html</loc></url>
+<url><loc>https://globaltoolhub.online/palette-generator.html</loc></url>
+<url><loc>https://globaltoolhub.online/color-blindness-simulator.html</loc></url>
+
+<!-- 🌍 SEO & Marketing Tools -->
+<url><loc>https://globaltoolhub.online/keyword-density-checker.html</loc></url>
+<url><loc>https://globaltoolhub.online/meta-tag-analyzer.html</loc></url>
+<url><loc>https://globaltoolhub.online/word-counter.html</loc></url>
+
+<!-- 🛠 Utility Tools -->
+<url><loc>https://globaltoolhub.online/qr-code-generator-scanner.html</loc></url>
+<url><loc>https://globaltoolhub.online/barcode-generator.html</loc></url>
+<url><loc>https://globaltoolhub.online/uuid-generator.html</loc></url>
+<url><loc>https://globaltoolhub.online/unit-converter.html</loc></url>
+<url><loc>https://globaltoolhub.online/time-zone-converter.html</loc></url>
+<url><loc>https://globaltoolhub.online/random-number-password-generator.html</loc></url>
+
+</urlset>
